@@ -1,0 +1,13 @@
+{
+    "variable": {
+        "instance_configuration": {
+            "type": "any"
+        },
+        "namespace": {
+            "type": "string"
+        },
+        "replica_configuration": {
+            "type": "any"
+        }
+    }
+}

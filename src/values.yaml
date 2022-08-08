@@ -1,0 +1,3 @@
+# Suggested by timescale but not default because would be breaking change for them
+# https://github.com/timescale/helm-charts/blob/master/charts/timescaledb-single/values.yaml#L566-L568
+podManagementPolicy: Parallel
