@@ -20,7 +20,7 @@ locals {
 }
 
 resource "massdriver_artifact" "authentication" {
-  field                = "authentication"
+  field                = "postgresql-authentication"
   provider_resource_id = "${local.data_authentication.hostname}"
   name                 = "'Root' postgres user credentials for Timescale DB at for: ${local.data_authentication.hostname}"
   artifact = jsonencode(
@@ -31,6 +31,7 @@ resource "massdriver_artifact" "authentication" {
           kubernetes_namespace = var.namespace
         }
         authentication = local.data_authentication
+        security = {}
       }
       specs = {
         rdbms = local.specs_rdbms

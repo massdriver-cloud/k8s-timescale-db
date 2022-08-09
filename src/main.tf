@@ -1,5 +1,5 @@
 locals {
-  chart_version = "0.8.2"
+  chart_version = "0.14.0"
   release       = var.md_metadata.name_prefix
 }
 
@@ -21,7 +21,7 @@ resource "random_password" "replication" {
 resource "helm_release" "timescaledb" {
   name             = local.release
   chart            = "timescaledb-single"
-  repository       = "https://raw.githubusercontent.com/timescale/timescaledb-kubernetes/master/charts/repo/"
+  repository       = "https://charts.timescale.com"
   version          = local.chart_version
   namespace        = var.namespace
   create_namespace = true
