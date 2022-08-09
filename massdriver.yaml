@@ -96,6 +96,13 @@ artifacts:
 ui:
   ui:order:
     - "*"
+  instance_configuration:
+    data_volume_size:
+      ui:field: conversionFieldData
+      default: Gibibytes
+    memory_limit:
+      ui:field: conversionFieldData
+      default: Gibibytes
   ## set top level ui:wiget
   # secret_key:
   #    ui:widget: "password"
