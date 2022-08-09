@@ -15,7 +15,7 @@ locals {
     engine  = "TimescaleDB"
     # this is the https://github.com/timescale/timescaledb-docker-ha image tag default from the chart
     # contains postgres and timescaledb versions
-    version =  "pg14.3-ts2.7.0-p0"
+    version =  "pg14.4-ts2.7.2-p0"
   }
 }
 
