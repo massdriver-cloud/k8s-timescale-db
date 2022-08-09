@@ -1,3 +1,11 @@
 # Suggested by timescale but not default because would be breaking change for them
 # https://github.com/timescale/helm-charts/blob/master/charts/timescaledb-single/values.yaml#L566-L568
 podManagementPolicy: Parallel
+# we want to control when the pgsql or timescale versions are updated as this may require additional action in this bundle.
+# also the default in the timescale chart is naturally a little behind current.
+image:
+  # Image was built from
+  # https://github.com/timescale/timescaledb-docker-ha
+  repository: timescale/timescaledb-ha
+  tag: pg14.4-ts2.7.2-p0
+  pullPolicy: Always
