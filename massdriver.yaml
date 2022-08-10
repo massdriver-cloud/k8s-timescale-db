@@ -11,14 +11,14 @@ type: "bundle"
 params:
   examples:
     - __name: Development
-      instance_configuration:
+      database_configuration:
         storage: 10
         cpu_limit: 1
         memory_limit: 2
       replica_configuration:
         replicas: 1
     - __name: Production
-      instance_configuration:
+      database_configuration:
         storage: 50
         cpu_limit: 4
         memory_limit: 8
@@ -26,7 +26,7 @@ params:
         replicas: 3
   required:
     - namespace
-    - instance_configuration
+    - database_configuration
     - replica_configuration
   properties:
     namespace:
@@ -36,42 +36,31 @@ params:
       pattern: "^[a-z]{1,}[a-z0-9-]{0,62}$"
       message:
         pattern: Namespace can only contain lowercase letters, numbers, and hyphens, with a max of 63 characters.
-    instance_configuration:
+    database_configuration:
       type: object
       title: Instance Configuration
       properties:
         data_volume_size:
           type: integer
           title: Data Volume Size
-          description: The size (in GiB) of the timescale DB instance's data storage. Must be an integer between 10 and 1000.
+          description: The size (in GiB) of the TimescaleDB's data storage
           minimum: 10
           maximum: 1000
           default: 10
         cpu_limit:
           type: number
           title: CPU Limit
-          description: Unit is in CPUs. Decimal numbers are allowed (3 digits of precision). Value must be between 0.5 and 32.
+          description: The amount of compute (in vCPUs) made available to your TimescaleDB deployment by kubernetes. Value must be between 0.5 and 32.
           minimum: 0.5
           maximum: 32
           default: 1.0
         memory_limit:
           type: number
           title: Memory Limit
-          description: Unit is Gi. Decimal numbers are allowed. Value must be between 0.5 and 64
+          description: The ammount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes. Decimal numbers are allowed. Value must be between 0.5 and 64
           minimum: 0.5
           maximum: 64
           default: 4
-    replica_configuration:
-      type: object
-      title: Replica Configuration
-      properties:
-        replicas:
-          type: integer
-          title: Replicas
-          description: Number of replicas to create. Must be an integer between 1 and 5.
-          minimum: 1
-          maximum: 5
-          default: 3
 
 # schema-connections.json
 # Named list of input connections (artifacts) (map[name]artifact)
@@ -96,7 +85,7 @@ artifacts:
 ui:
   ui:order:
     - "*"
-  instance_configuration:
+  database_configuration:
     data_volume_size:
       ui:field: conversionFieldData
       default: Gibibytes

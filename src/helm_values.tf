@@ -4,22 +4,21 @@ locals {
 
     resources = {
       requests = {
-        cpu    = "${var.instance_configuration.cpu_limit}"
-        memory = "${var.instance_configuration.memory_limit}Gi"
+        cpu    = "${var.database_configuration.cpu_limit}"
+        memory = "${var.database_configuration.memory_limit}Gi"
       }
       limits = {
-        cpu    = "${var.instance_configuration.cpu_limit}"
-        memory = "${var.instance_configuration.memory_limit}Gi"
+        cpu    = "${var.database_configuration.cpu_limit}"
+        memory = "${var.database_configuration.memory_limit}Gi"
       }
     }
 
     persistentVolumes = {
       data = {
-        size = "${var.instance_configuration.data_volume_size}Gi"
+        size = "${var.database_configuration.data_volume_size}Gi"
       }
     }
 
-    replicaCount        = var.replica_configuration.replicas
 
     service = {
         primary = {
