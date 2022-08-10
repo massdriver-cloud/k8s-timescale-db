@@ -49,14 +49,14 @@ params:
           default: 10
         cpu_limit:
           type: number
-          title: CPU Limit
+          title: CPU
           description: The amount of compute (in vCPUs) made available to your TimescaleDB deployment by kubernetes
           minimum: 0.5
-          maximum: 32
+          maximum: 96
           default: 1.0
         memory_limit:
           type: number
-          title: Memory Limit
+          title: Memory
           description: The ammount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes
           minimum: 0.5
           maximum: 64
