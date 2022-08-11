@@ -15,19 +15,14 @@ params:
         storage: 10
         cpu_limit: 1
         memory_limit: 2
-      replica_configuration:
-        replicas: 1
     - __name: Production
       database_configuration:
         storage: 50
         cpu_limit: 4
         memory_limit: 8
-      replica_configuration:
-        replicas: 3
   required:
     - namespace
     - database_configuration
-    - replica_configuration
   properties:
     namespace:
       type: string
