@@ -1,0 +1,102 @@
+# This file will be used to generate all of the schema-*.json files in a bundle
+schema: draft-07
+name: "k8s-timescale-db"
+description: "Deploy Timescale DB on a Kubernetes Cluster"
+ref: github.com/massdriver-cloud/k8s-timescale-db
+access: "public"
+type: "bundle"
+
+# schema-params.json
+# JSON Schema sans-fields above
+params:
+  examples:
+    - __name: Development
+      database_configuration:
+        storage: 10
+        cpu_limit: 1
+        memory_limit: 2
+      replica_configuration:
+        replicas: 1
+    - __name: Production
+      database_configuration:
+        storage: 50
+        cpu_limit: 4
+        memory_limit: 8
+      replica_configuration:
+        replicas: 3
+  required:
+    - namespace
+    - database_configuration
+    - replica_configuration
+  properties:
+    namespace:
+      type: string
+      title: Namespace
+      description: Choose a namespace for Timescale DB.
+      pattern: "^[a-z]{1,}[a-z0-9-]{0,62}$"
+      message:
+        pattern: Namespace can only contain lowercase letters, numbers, and hyphens, with a max of 63 characters.
+    database_configuration:
+      type: object
+      title: Instance Configuration
+      properties:
+        data_volume_size:
+          type: integer
+          title: Data Volume Size
+          description: The size of the TimescaleDB's data storage
+          minimum: 10
+          maximum: 1000
+          default: 10
+        cpu_limit:
+          type: number
+          title: CPU
+          description: The amount of compute (in vCPUs) made available to your TimescaleDB deployment by kubernetes
+          minimum: 0.5
+          maximum: 96
+          default: 1.0
+        memory_limit:
+          type: number
+          title: Memory
+          description: The ammount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes
+          minimum: 0.5
+          maximum: 64
+          default: 4
+
+# schema-connections.json
+# Named list of input connections (artifacts) (map[name]artifact)
+connections:
+  required:
+  - kubernetes_cluster
+  properties:
+    kubernetes_cluster:
+      $ref: massdriver/kubernetes-cluster
+
+# schema-artifacts.json
+# Named list of output artifacts  (map[name]artifact)
+artifacts:
+  required:
+    - postgresql-authentication
+  properties:
+    postgresql-authentication:
+      $ref: massdriver/postgresql-authentication
+
+# schema-ui.json
+# List of form customizations for params-schema
+ui:
+  ui:order:
+    - "*"
+  database_configuration:
+    data_volume_size:
+      ui:field: conversionFieldData
+      default: Gibibytes
+    memory_limit:
+      ui:field: conversionFieldData
+      default: Gibibytes
+  ## set top level ui:wiget
+  # secret_key:
+  #    ui:widget: "password"
+  ## Set key in an array of objects
+  # secrets:
+  #   items:
+  #     mdKeyId:
+  #       ui:widget: "hidden"
