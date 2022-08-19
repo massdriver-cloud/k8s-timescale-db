@@ -53,3 +53,38 @@ terraform plan -var-file=./dev.connections.tfvars.json -var-file=./dev.params.tf
 
 - `operator.mdx` TBD
 - `schema.stories.json` TBD
+# JSON Schema
+
+*Deploy Timescale DB on a Kubernetes Cluster*
+
+## Properties
+
+- **`database_configuration`** *(object)*: Cannot contain additional properties.
+  - **`cpu_limit`** *(number)*: The amount of compute (in vCPUs) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `96`. Default: `1`.
+  - **`data_volume_size`** *(integer)*: The size of the TimescaleDB's data storage. Minimum: `10`. Maximum: `1000`. Default: `10`.
+  - **`memory_limit`** *(number)*: The ammount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `64`. Default: `4`.
+- **`namespace`** *(string)*: Choose a namespace for Timescale DB.
+## Examples
+
+  ```json
+  {
+      "__name": "Development",
+      "database_configuration": {
+          "cpu_limit": 1,
+          "memory_limit": 2,
+          "storage": 10
+      }
+  }
+  ```
+
+  ```json
+  {
+      "__name": "Production",
+      "database_configuration": {
+          "cpu_limit": 4,
+          "memory_limit": 8,
+          "storage": 50
+      }
+  }
+  ```
+
