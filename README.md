@@ -47,8 +47,36 @@ Form input parameters for configuring a bundle for deployment.
 <summary>View</summary>
 
 <!-- PARAMS:START -->
+## Properties
 
-**Params coming soon**
+- **`database_configuration`** *(object)*
+  - **`cpu_limit`** *(number)*: The amount of compute (in vCPUs) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `96`. Default: `1`.
+  - **`data_volume_size`** *(integer)*: The size of the TimescaleDB's data storage. Minimum: `10`. Maximum: `1000`. Default: `10`.
+  - **`memory_limit`** *(number)*: The ammount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `64`. Default: `4`.
+- **`namespace`** *(string)*: Choose a namespace for Timescale DB.
+## Examples
+
+  ```json
+  {
+      "__name": "Development",
+      "database_configuration": {
+          "cpu_limit": 1,
+          "memory_limit": 2,
+          "storage": 10
+      }
+  }
+  ```
+
+  ```json
+  {
+      "__name": "Production",
+      "database_configuration": {
+          "cpu_limit": 4,
+          "memory_limit": 8,
+          "storage": 50
+      }
+  }
+  ```
 
 <!-- PARAMS:END -->
 
@@ -62,9 +90,83 @@ Connections from other bundles that this bundle depends on.
 <summary>View</summary>
 
 <!-- CONNECTIONS:START -->
+## Properties
 
-**Connections coming soon**
+- **`kubernetes_cluster`** *(object)*: Kubernetes cluster authentication and cloud-specific configuration. Cannot contain additional properties.
+  - **`data`** *(object)*
+    - **`authentication`** *(object)*
+      - **`cluster`** *(object)*
+        - **`certificate-authority-data`** *(string)*
+        - **`server`** *(string)*
+      - **`user`** *(object)*
+        - **`token`** *(string)*
+    - **`infrastructure`** *(object)*: Cloud specific Kubernetes configuration data.
+      - **One of**
+        - AWS EKS infrastructure config*object*: . Cannot contain additional properties.
+          - **`arn`** *(string)*: Amazon Resource Name.
 
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+          - **`oidc_issuer_url`** *(string)*: An HTTPS endpoint URL.
+
+            Examples:
+            ```json
+            "https://example.com/some/path"
+            ```
+
+            ```json
+            "https://massdriver.cloud"
+            ```
+
+        - Azure Infrastructure Resource ID*object*: Minimal Azure Infrastructure Config. Cannot contain additional properties.
+          - **`ari`** *(string)*: Azure Resource ID.
+
+            Examples:
+            ```json
+            "/subscriptions/12345678-1234-1234-abcd-1234567890ab/resourceGroups/resource-group-name/providers/Microsoft.Network/virtualNetworks/network-name"
+            ```
+
+        - GCP Infrastructure GRN*object*: Minimal GCP Infrastructure Config. Cannot contain additional properties.
+          - **`grn`** *(string)*: GCP Resource Name (GRN).
+
+            Examples:
+            ```json
+            "projects/my-project/global/networks/my-global-network"
+            ```
+
+            ```json
+            "projects/my-project/regions/us-west2/subnetworks/my-subnetwork"
+            ```
+
+            ```json
+            "projects/my-project/topics/my-pubsub-topic"
+            ```
+
+            ```json
+            "projects/my-project/subscriptions/my-pubsub-subscription"
+            ```
+
+            ```json
+            "projects/my-project/locations/us-west2/instances/my-redis-instance"
+            ```
+
+            ```json
+            "projects/my-project/locations/us-west2/clusters/my-gke-cluster"
+            ```
+
+  - **`specs`** *(object)*
+    - **`kubernetes`** *(object)*: Kubernetes distribution and version specifications.
+      - **`cloud`** *(string)*: Must be one of: `['aws', 'gcp', 'azure']`.
+      - **`distribution`** *(string)*: Must be one of: `['eks', 'gke', 'aks']`.
+      - **`platform_version`** *(string)*
+      - **`version`** *(string)*
 <!-- CONNECTIONS:END -->
 
 </details>
@@ -77,8 +179,165 @@ Resources created by this bundle that can be connected to other bundles.
 <summary>View</summary>
 
 <!-- ARTIFACTS:START -->
+## Properties
 
-**Artifacts coming soon**
+- **`postgresql-authentication`** *(object)*: Authentication parameters for a PostgreSQL database. Cannot contain additional properties.
+  - **`data`** *(object)*: Cannot contain additional properties.
+    - **`authentication`** *(object)*
+      - **`hostname`** *(string)*
+      - **`password`** *(string)*
+      - **`port`** *(integer)*: Port number. Minimum: `0`. Maximum: `65535`.
+      - **`username`** *(string)*
+    - **`infrastructure`** *(object)*: Cloud specific PostgreSQL configuration data.
+      - **One of**
+        - AWS Infrastructure ARN*object*: Minimal AWS Infrastructure Config. Cannot contain additional properties.
+          - **`arn`** *(string)*: Amazon Resource Name.
+
+            Examples:
+            ```json
+            "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+            ```
+
+            ```json
+            "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+            ```
+
+        - GCP Infrastructure Name*object*: GCP Infrastructure Config For Resources With A Name Not A GRN. Cannot contain additional properties.
+          - **`name`** *(string)*: Name Of GCP Resource.
+
+            Examples:
+            ```json
+            "my-cloud-function"
+            ```
+
+            ```json
+            "my-sql-instance"
+            ```
+
+        - Azure Infrastructure Resource ID*object*: Minimal Azure Infrastructure Config. Cannot contain additional properties.
+          - **`ari`** *(string)*: Azure Resource ID.
+
+            Examples:
+            ```json
+            "/subscriptions/12345678-1234-1234-abcd-1234567890ab/resourceGroups/resource-group-name/providers/Microsoft.Network/virtualNetworks/network-name"
+            ```
+
+        - Kuberenetes infrastructure config*object*: . Cannot contain additional properties.
+          - **`kubernetes_namespace`** *(string)*
+          - **`kubernetes_service`** *(string)*
+    - **`security`** *(object)*: TBD.
+      - **Any of**
+        - AWS Security information*object*: Informs downstream services of network and/or IAM policies. Cannot contain additional properties.
+          - **`iam`** *(object)*: IAM Policies. Cannot contain additional properties.
+            - **`^[a-z-/]+$`** *(object)*
+              - **`policy_arn`** *(string)*: AWS IAM policy ARN.
+
+                Examples:
+                ```json
+                "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+                ```
+
+                ```json
+                "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+                ```
+
+          - **`network`** *(object)*: AWS security group rules to inform downstream services of ports to open for communication. Cannot contain additional properties.
+            - **`^[a-z-]+$`** *(object)*
+              - **`arn`** *(string)*: Amazon Resource Name.
+
+                Examples:
+                ```json
+                "arn:aws:rds::ACCOUNT_NUMBER:db/prod"
+                ```
+
+                ```json
+                "arn:aws:ec2::ACCOUNT_NUMBER:vpc/vpc-foo"
+                ```
+
+              - **`port`** *(integer)*: Port number. Minimum: `0`. Maximum: `65535`.
+              - **`protocol`** *(string)*: Must be one of: `['tcp', 'udp']`.
+        - Security*object*: Azure Security Configuration. Cannot contain additional properties.
+          - **`iam`** *(object)*: IAM Roles And Scopes. Cannot contain additional properties.
+            - **`^[a-z/-]+$`** *(object)*
+              - **`role`**: Azure Role.
+
+                Examples:
+                ```json
+                "Storage Blob Data Reader"
+                ```
+
+              - **`scope`** *(string)*: Azure IAM Scope.
+        - Security*object*: GCP Security Configuration. Cannot contain additional properties.
+          - **`iam`** *(object)*: IAM Roles And Conditions. Cannot contain additional properties.
+            - **`^[a-z-/]+$`** *(object)*
+              - **`condition`** *(string)*: GCP IAM Condition.
+              - **`role`**: GCP Role.
+
+                Examples:
+                ```json
+                "roles/owner"
+                ```
+
+                ```json
+                "roles/redis.editor"
+                ```
+
+                ```json
+                "roles/storage.objectCreator"
+                ```
+
+                ```json
+                "roles/storage.legacyObjectReader"
+                ```
+
+  - **`specs`** *(object)*: Cannot contain additional properties.
+    - **`rdbms`** *(object)*: Common metadata for relational databases.
+      - **`engine`** *(string)*: The type of database server.
+
+        Examples:
+        ```json
+        "postgresql"
+        ```
+
+        ```json
+        "mysql"
+        ```
+
+      - **`engine_version`** *(string)*: The cloud provider's database version.
+
+        Examples:
+        ```json
+        "5.7.mysql_aurora.2.03.2"
+        ```
+
+      - **`version`** *(string)*: The database version. Default: ``.
+
+        Examples:
+        ```json
+        "12.2"
+        ```
+
+        ```json
+        "5.7"
+        ```
+
+
+      Examples:
+      ```json
+      {
+          "engine": "postgresql",
+          "engine_version": "10.14",
+          "version": "10.14"
+      }
+      ```
+
+      ```json
+      {
+          "engine": "mysql",
+          "engine_version": "5.7.mysql_aurora.2.03.2",
+          "version": "5.7"
+      }
+      ```
 
 <!-- ARTIFACTS:END -->
 
