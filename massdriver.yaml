@@ -2,7 +2,7 @@
 schema: draft-07
 name: "k8s-timescale-db"
 description: "Deploy Timescale DB on a Kubernetes Cluster"
-ref: github.com/massdriver-cloud/k8s-timescale-db
+source_url: github.com/massdriver-cloud/k8s-timescale-db
 access: "public"
 type: "bundle"
 
