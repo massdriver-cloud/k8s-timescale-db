@@ -6,6 +6,12 @@ source_url: github.com/massdriver-cloud/k8s-timescale-db
 access: "public"
 type: "bundle"
 
+steps:
+  - path: pvcs
+    provisioner: terraform
+  - path: src
+    provisioner: terraform
+
 # schema-params.json
 # JSON Schema sans-fields above
 params:
@@ -15,11 +21,13 @@ params:
         data_volume_size: 10
         cpu_limit: 1
         memory_limit: 2
+        delete_volumes_on_destroy: true
     - __name: Production
       database_configuration:
         data_volume_size: 50
         cpu_limit: 4
         memory_limit: 8
+        delete_volumes_on_destroy: false
   required:
     - namespace
     - database_configuration
@@ -52,10 +60,16 @@ params:
         memory_limit:
           type: number
           title: Memory
-          description: The ammount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes
+          description: The amount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes
           minimum: 0.5
           maximum: 64
           default: 4
+        delete_volumes_on_destroy:
+          type: boolean
+          title: Delete Volumes After Decomission
+          description: If set to false and this bundle is destroyed, the volumes will be left behind. See operator guide for more information.
+          default: false
+
 
 # schema-connections.json
 # Named list of input connections (artifacts) (map[name]artifact)

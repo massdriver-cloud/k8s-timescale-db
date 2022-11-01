@@ -1,0 +1,7 @@
+{
+    "variable": {
+        "kubernetes_cluster": {
+            "type": "any"
+        }
+    }
+}

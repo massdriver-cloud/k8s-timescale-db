@@ -1,0 +1,10 @@
+{
+    "variable": {
+        "database_configuration": {
+            "type": "any"
+        },
+        "namespace": {
+            "type": "string"
+        }
+    }
+}
