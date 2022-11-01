@@ -42,6 +42,11 @@ params:
     database_configuration:
       type: object
       title: Instance Configuration
+      required:
+        - data_volume_size
+        - cpu_limit
+        - memory_limit
+        - delete_volumes_on_destroy
       properties:
         data_volume_size:
           type: integer
@@ -70,7 +75,6 @@ params:
           description: If set to false and this bundle is destroyed, the volumes will be left behind. See operator guide for more information.
           default: false
 
-
 # schema-connections.json
 # Named list of input connections (artifacts) (map[name]artifact)
 connections:
@@ -93,19 +97,19 @@ artifacts:
 # List of form customizations for params-schema
 ui:
   ui:order:
+    - namespace
+    - database_configuration
     - "*"
   database_configuration:
+    ui:order:
+      - data_volume_size
+      - cpu_limit
+      - memory_limit
+      - delete_volumes_on_destroy
+      - "*"
     data_volume_size:
       ui:field: conversionFieldData
-      default: Gibibytes
+      unit: GiB
     memory_limit:
       ui:field: conversionFieldData
-      default: Gibibytes
-  ## set top level ui:wiget
-  # secret_key:
-  #    ui:widget: "password"
-  ## Set key in an array of objects
-  # secrets:
-  #   items:
-  #     mdKeyId:
-  #       ui:widget: "hidden"
+      unit: GiB
