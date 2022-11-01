@@ -13,7 +13,7 @@ locals {
 
     resources = {
       requests = {
-        cpu    = "${var.database_configuration.cpu_limit}"
+        cpu    = tostring(var.database_configuration.cpu_limit)
         memory = "${var.database_configuration.memory_limit}Gi"
       }
       limits = {
