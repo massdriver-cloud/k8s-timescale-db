@@ -58,7 +58,8 @@ Form input parameters for configuring a bundle for deployment.
 - **`database_configuration`** *(object)*
   - **`cpu_limit`** *(number)*: The amount of compute (in vCPUs) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `96`. Default: `1`.
   - **`data_volume_size`** *(integer)*: The size of the TimescaleDB's data storage. Minimum: `10`. Maximum: `1000`. Default: `10`.
-  - **`memory_limit`** *(number)*: The ammount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `64`. Default: `4`.
+  - **`delete_volumes_on_destroy`** *(boolean)*: If set to false and this bundle is destroyed, the volumes will be left behind. See operator guide for more information. Default: `False`.
+  - **`memory_limit`** *(number)*: The amount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `64`. Default: `4`.
 - **`namespace`** *(string)*: Choose a namespace for Timescale DB.
 ## Examples
 
@@ -68,6 +69,7 @@ Form input parameters for configuring a bundle for deployment.
       "database_configuration": {
           "cpu_limit": 1,
           "data_volume_size": 10,
+          "delete_volumes_on_destroy": true,
           "memory_limit": 2
       }
   }
@@ -79,6 +81,7 @@ Form input parameters for configuring a bundle for deployment.
       "database_configuration": {
           "cpu_limit": 4,
           "data_volume_size": 50,
+          "delete_volumes_on_destroy": false,
           "memory_limit": 8
       }
   }

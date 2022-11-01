@@ -1,6 +1,15 @@
 locals {
   helm_values = {
-    namespace          = var.namespace
+    serviceAccount = {
+      name = var.md_metadata.name_prefix
+    }
+    image = {
+      # We want to control when the pgsql or timescale versions are updated as this may require additional action in this bundle.
+      # As a Terraform variable, we can also refer to it in the artifact specs.
+      # Image
+      # https://github.com/timescale/timescaledb-docker-ha
+      tag = "pg14.5-ts2.8.1-p2"
+    }
 
     resources = {
       requests = {
@@ -19,33 +28,30 @@ locals {
       }
     }
 
-
     service = {
-        primary = {
-            labels = var.md_metadata.default_tags
-        }
-        replica = {
-            labels = var.md_metadata.default_tags
-        }
+      primary = {
+        labels = var.md_metadata.default_tags
+      }
+      replica = {
+        labels = var.md_metadata.default_tags
+      }
+    }
+
+    secrets = {
+      credentials = {
+        PATRONI_SUPERUSER_PASSWORD = local.user_super.password
+      }
     }
 
     patroni = {
-        postgresql = {
-            # we'd rather handle the generation of passwords ourselves than let the chart randomly generate them.
-            authentication = {
-                superuser = {
-                    password = random_password.superuser.result
-                }
-                replication = {
-                    password = random_password.replication.result
-                }
-                # TODO do we need to instantiate an admin or can we just use superuser (postgres)?
-                admin = {
-                    username = "admin"
-                    password = random_password.admin.result
-                }
-            }
+      postgresql = {
+        authentication = {
+          superuser = {
+            username = local.user_super.username
+            password = local.user_super.password
+          }
         }
+      }
     }
   }
 }
