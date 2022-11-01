@@ -60,7 +60,7 @@ Form input parameters for configuring a bundle for deployment.
   - **`data_volume_size`** *(integer)*: The size of the TimescaleDB's data storage. Minimum: `10`. Maximum: `1000`. Default: `10`.
   - **`delete_volumes_on_destroy`** *(boolean)*: If set to false and this bundle is destroyed, the volumes will be left behind. See operator guide for more information. Default: `False`.
   - **`memory_limit`** *(number)*: The amount of memory (in GiB) made available to your TimescaleDB deployment by kubernetes. Minimum: `0.5`. Maximum: `64`. Default: `4`.
-- **`namespace`** *(string)*: Choose a namespace for Timescale DB.
+- **`namespace`** *(string)*: Choose a namespace for Timescale DB. Default: `default`.
 ## Examples
 
   ```json
