@@ -31,6 +31,7 @@ resource "null_resource" "kubectl" {
       echo "$kubeconfig" > kubeconfig
       export KUBECONFIG=./kubeconfig
       kubectl delete -n $namespace pvc storage-volume-$name-timescaledb-0 wal-volume-$name-timescaledb-0 || true
+      rm kubeconfig
 EOT
     interpreter = ["/bin/bash", "-c"]
     environment = {
