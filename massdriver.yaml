@@ -3,7 +3,6 @@ name: k8s-timescale-db
 version: 1.0.0
 description: Deploy Timescale DB on a Kubernetes Cluster
 source_url: https://github.com/massdriver-cloud/k8s-timescale-db
-type: application
 steps:
 - path: pvcs
   provisioner: opentofu
