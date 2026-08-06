@@ -1,36 +1,30 @@
-# This file will be used to generate all of the schema-*.json files in a bundle
 schema: draft-07
-name: "k8s-timescale-db"
-description: "Deploy Timescale DB on a Kubernetes Cluster"
-source_url: github.com/massdriver-cloud/k8s-timescale-db
-access: "public"
-type: "bundle"
-
+name: k8s-timescale-db
+version: 1.0.0
+description: Deploy Timescale DB on a Kubernetes Cluster
+source_url: https://github.com/massdriver-cloud/k8s-timescale-db
 steps:
-  - path: pvcs
-    provisioner: terraform
-  - path: src
-    provisioner: terraform
-
-# schema-params.json
-# JSON Schema sans-fields above
+- path: pvcs
+  provisioner: opentofu
+- path: src
+  provisioner: opentofu
 params:
   examples:
-    - __name: Development
-      database_configuration:
-        data_volume_size: 10
-        cpu_limit: 1
-        memory_limit: 2
-        delete_volumes_on_destroy: true
-    - __name: Production
-      database_configuration:
-        data_volume_size: 50
-        cpu_limit: 4
-        memory_limit: 8
-        delete_volumes_on_destroy: false
+  - __name: Development
+    database_configuration:
+      data_volume_size: 10
+      cpu_limit: 1
+      memory_limit: 2
+      delete_volumes_on_destroy: true
+  - __name: Production
+    database_configuration:
+      data_volume_size: 50
+      cpu_limit: 4
+      memory_limit: 8
+      delete_volumes_on_destroy: false
   required:
-    - namespace
-    - database_configuration
+  - namespace
+  - database_configuration
   properties:
     namespace:
       type: string
@@ -44,10 +38,10 @@ params:
       type: object
       title: Instance Configuration
       required:
-        - data_volume_size
-        - cpu_limit
-        - memory_limit
-        - delete_volumes_on_destroy
+      - data_volume_size
+      - cpu_limit
+      - memory_limit
+      - delete_volumes_on_destroy
       properties:
         data_volume_size:
           type: integer
@@ -75,39 +69,30 @@ params:
           title: Delete Volumes After Decomission
           description: If set to false and this bundle is destroyed, the volumes will be left behind. See operator guide for more information.
           default: false
-
-# schema-connections.json
-# Named list of input connections (artifacts) (map[name]artifact)
 connections:
   required:
   - kubernetes_cluster
   properties:
     kubernetes_cluster:
-      $ref: massdriver/kubernetes-cluster
-
-# schema-artifacts.json
-# Named list of output artifacts  (map[name]artifact)
+      "$ref": massdriver/kubernetes-cluster
 artifacts:
   required:
-    - postgresql-authentication
+  - postgresql-authentication
   properties:
     postgresql-authentication:
-      $ref: massdriver/postgresql-authentication
-
-# schema-ui.json
-# List of form customizations for params-schema
+      "$ref": massdriver/postgresql-authentication
 ui:
   ui:order:
-    - namespace
-    - database_configuration
-    - "*"
+  - namespace
+  - database_configuration
+  - "*"
   database_configuration:
     ui:order:
-      - data_volume_size
-      - cpu_limit
-      - memory_limit
-      - delete_volumes_on_destroy
-      - "*"
+    - data_volume_size
+    - cpu_limit
+    - memory_limit
+    - delete_volumes_on_destroy
+    - "*"
     data_volume_size:
       ui:field: conversionFieldData
       unit: GiB
